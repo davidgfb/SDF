@@ -29,9 +29,7 @@ vec3 render() { //color basado en la posicion del pixel en la pantalla
     vec3 ro = vec3(0, 0, -1), rd = normalize(vec3(uv, 1)); //origen_Rayo, dir_Rayo
     float dist = rayMarch(ro, rd); //dist al obj
 
-    if (dist < 100) {
-        col += dist; //suma la distancia al color resultante
-    }
+    if (dist < 100) col += dist; //suma la distancia al color resultante
 
     return col;
 }
