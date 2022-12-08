@@ -8,11 +8,14 @@ float map(vec3 p) { //sdf esfera
     return length(p) - 3.0 / 5;
 }
 
-vec3 getNormal(vec3 p) { //en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
-    vec2 e = vec2(1.0 / 100, 0);
+vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0), float h = 0) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
+    vec3 color = vec3(1, 0, 0); //rojo
+                                                         
+    if (dot(p, n) + h < 0) { //n debe estar normalizada 
+        color = vec3(0, 1, 0); //verde
+    }
 
-    return normalize(map(p) -\
-             vec3(map(p - e.xyy), map(p - e.yxy), map(p - e.yyx)));                   
+    return color;
 }
 
 vec3 get_P(float dist, vec3 rd, vec3 ro) {
