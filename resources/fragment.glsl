@@ -1,4 +1,4 @@
-#version 330 core
+#version 460
 out vec4 fragColor; //color para cada fragmento
 
 uniform vec2 u_resolution;
