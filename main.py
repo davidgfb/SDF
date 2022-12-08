@@ -2,12 +2,12 @@ from moderngl_window import WindowConfig, run_window_config
 from moderngl_window.geometry import quad_fs
 
 class App(WindowConfig):
-    window_size, resource_dir = (900, 600), 'resources'
-
+    window_size = 900, 600
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.quad = quad_fs() #pantalla
-        self.program = self.ctx.program(vertex_shader =\
+        self.quad, self.program = quad_fs(),\
+                                self.ctx.program(vertex_shader =\
         '''#version 460
         in vec3 in_position; //vertices pantalla
 
@@ -25,11 +25,14 @@ class App(WindowConfig):
         }
 
         vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0), float h = 0) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
-            vec3 color = vec3(1, 0, 0); //rojo
+            float sharpness = 10, dist = clamp(p.y * sharpness + 1.0 / 2, 0, 1);
+            vec3 color = mix(vec3(0, 1, 0), vec3(1, 0, 0), dist);
+
+            /*vec3 color = vec3(1, 0, 0); //rojo
                                                                  
             if (dot(p, n) + h < 0) { //n debe estar normalizada 
                 color = vec3(0, 1, 0); //verde
-            }
+            }*/
 
             return color;
         }
@@ -63,7 +66,7 @@ class App(WindowConfig):
         void main() {
             fragColor = vec4(render(), 1);
         }
-        ''')
+        ''') #pantalla
         self.set_uniform('u_resolution', self.window_size)        
 
     def set_uniform(self, u_name, u_value):
