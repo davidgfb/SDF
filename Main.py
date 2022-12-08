@@ -18,21 +18,21 @@ class App(WindowConfig):
         out vec4 fragColor; //color para cada fragmento
 
         uniform vec2 u_resolution;
-        uniform float u_time;
+        uniform float h = 0;
 
         float map(vec3 p) { //sdf esfera
             return length(p) - 3.0 / 5;
         }
 
-        vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0), float h = 0) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
-            float sharpness = 10, dist = clamp(p.y * sharpness + 1.0 / 2, 0, 1);
-            vec3 color = mix(vec3(0, 1, 0), vec3(1, 0, 0), dist);
+        vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0)) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
+            /*float sharpness = 10, dist = clamp(p.y * sharpness + 1.0 / 2, 0, 1);
+            vec3 color = mix(vec3(0, 1, 0), vec3(1, 0, 0), dist);*/
 
-            /*vec3 color = vec3(1, 0, 0); //rojo
+            vec3 color = vec3(1, 0, 0); //rojo
                                                                  
-            if (dot(p, n) + h < 0) { //n debe estar normalizada 
+            if (dot(p, n) - h < 0) { //n debe estar normalizada 
                 color = vec3(0, 1, 0); //verde
-            }*/
+            }
 
             return color;
         }
@@ -67,20 +67,20 @@ class App(WindowConfig):
             fragColor = vec4(render(), 1);
         }
         ''') #pantalla
-        self.set_uniform('u_resolution', self.window_size)        
-
-    def set_uniform(self, u_name, u_value):
-        try:
-            self.program[u_name] = u_value
-
-        except KeyError:
-            pass
-            #print(f'{u_name} not used in shader')
-
+        self.program['u_resolution'] = self.window_size
+        
     def render(self, time, frame_time):
-        self.ctx.clear()
-        self.set_uniform('u_time', time)
-        self.quad.render(self.program)
+        global es_Primera_Vez
 
+        if not es_Primera_Vez:
+            self.program['h'] = float(input('h? (-0.5...0.5): '))
+
+        else:
+            es_Primera_Vez = False
+
+        self.ctx.clear()       
+        self.quad.render(self.program) #uniform tiene q estar inicializado en glsl
+
+es_Primera_Vez = True
 run_window_config(App)
         
