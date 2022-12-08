@@ -11,7 +11,7 @@ class App(WindowConfig):
                                          'vertex.glsl',\
                                          fragment_shader =\
                                          'fragment.glsl')
-        self.set_uniform('u_resolution', self.window_size)
+        self.set_uniform('u_resolution', self.window_size)        
 
     def set_uniform(self, u_name, u_value):
         try:
