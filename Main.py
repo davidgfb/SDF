@@ -67,7 +67,7 @@ class App(WindowConfig):
         global es_Primera_Vez
 
         if not es_Primera_Vez:
-            self.program['h'] = float(input('h? (-0.5...0.5): '))
+            self.program['h'] = float(input('h? (-5...5): '))
 
         else:
             es_Primera_Vez = False
