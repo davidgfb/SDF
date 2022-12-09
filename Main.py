@@ -21,7 +21,7 @@ class App(WindowConfig):
         uniform float h = 0;
 
         float map(vec3 p) { //sdf esfera
-            return length(p) - 3.0 / 5;
+            return length(p) - 3.0 / 5; //u_resolution.y / u_resolution.x
         }
 
         vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0)) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
@@ -64,17 +64,31 @@ class App(WindowConfig):
         self.program['u_resolution'] = self.window_size
         
     def render(self, time, frame_time):
-        global es_Primera_Vez
-
-        if not es_Primera_Vez:
-            self.program['h'] = float(input('h? (-5...5): '))
-
-        else:
-            es_Primera_Vez = False
-
         self.ctx.clear()       
         self.quad.render(self.program) #uniform tiene q estar inicializado en glsl
 
-es_Primera_Vez = True
+    def unicode_char_entered(self, char):
+        global h
+
+        es_Mas = char == '+'
+        
+        if es_Mas or char == '-':
+            if es_Mas:
+                h += 1
+
+            else:
+                h -= 1
+
+            self.program['h'] = h            
+
+    '''def mouse_position_event(self, x, y, dx, dy):
+        print(x, y)
+        #self.program['u_mouse'] = (x, y)'''
+
+h, es_Primera_Vez = 0, True
 run_window_config(App)
+
+
+
+
         
