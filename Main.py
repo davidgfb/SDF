@@ -19,10 +19,20 @@ class App(WindowConfig):
 
         uniform vec2 u_resolution;
         uniform float h = 0;
+   
+        float map(vec3 p, vec3 or = vec3(0),\
+                  vec3 fin = vec3(0, 4.0 / 10, 0),\
+                  float r = 3.0 / 10) {
+            vec3 pa = p - or, ba = fin - or;
+            float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1); //?
 
-        float map(vec3 p) { //sdf esfera
+            return length(-ba * h + pa) - r;
+        } //sdf capsula
+
+
+        /*float map(vec3 p) { //sdf esfera
             return length(p) - 3.0 / 5; //u_resolution.y / u_resolution.x
-        }
+        }*/
 
         vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0)) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
             float sharpness = 10; 
