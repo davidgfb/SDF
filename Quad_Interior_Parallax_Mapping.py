@@ -50,24 +50,9 @@ class App(WindowConfig):
 
 
             float map(in vec3 p) {
-                return udQuad(vec3(1, 0,0), vec3(0,1,0), vec3(0,0, 1), vec3(1,-1,1), p) - 0.01; //0.5
+                return udQuad(vec3(1, 0,0), vec3(0,1,0),
+                       vec3(0,0, 1), vec3(1,-1,1), p) - 0.01; //0.5
             }
-
-            float intersect(vec3 ro, vec3 rd) {
-                    float maxd = 10.0, h = 1.0, t = 0.0;
-                
-                for(int i=0; i<50; i++) {
-                    if(!(h<0.001 || t>maxd)) {
-                        t += map(rd*t + ro);
-                    }
-                }
-
-                if(t>maxd) t=-1.0;
-                    
-                return t;
-            }
-
-            const vec3 lig = normalize(vec3(1.0,0.9,0.7));
 
             vec3 get_P(float dist, vec3 rd, vec3 ro) {
                 return dist * rd + ro;
@@ -103,31 +88,3 @@ class App(WindowConfig):
 
 h, es_Primera_Vez = 0, True
 run_window_config(App)
-
-
-
-
-'''float map(vec3 p, vec3 a, vec3 b, vec3 c, vec3 d) {
-                vec3 ba = b - a, pa = p - a, cb = c - b,\
-                     pb = p - b, dc = d - c, pc = p - c,\
-                     ad = a - d, pd = p - d;
-                vec3 nor = cross(ba, ad);
-
-                return sqrt((sign(dot(cross(ba,nor),pa)) +
-                       sign(dot(cross(cb, nor), pb)) +
-                       sign(dot(cross(dc, nor), pc)) +
-                       sign(dot(cross(ad, nor), pd)) < 3.0) ?
-                       min(min(min(dot2(ba * clamp(dot(ba, pa) / dot2(ba), 0.0, 1.0) - pa),
-                       dot2(cb * clamp(dot(cb, pb)/dot2(cb), 0.0, 1.0) - pb)),
-                       dot2(dc * clamp(dot(dc, pc)/dot2(dc), 0.0, 1.0) - pc)),
-                       dot2(ad * clamp(dot(ad, pd)/dot2(ad), 0.0, 1.0) - pd)) :
-                       dot(nor, pa) * dot(nor, pa) / dot2(nor));
-            } //sdf quad
-
-
-'''
-
-
-
-
-        
