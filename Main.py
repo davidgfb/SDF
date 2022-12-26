@@ -19,9 +19,23 @@ class App(WindowConfig):
 
             uniform vec2 u_resolution;
             uniform float u_time;
+            //uniform sampler2D u_texture1; //?
 
-            float map(vec3 p) { //sdf esfera
-                return length(p) - 3.0 / 5;
+            mat2 rot2D(float a) {
+                float sa = sin(a);
+                float ca = cos(a);
+
+                return mat2(ca, sa, -sa, ca);
+            }
+
+            /*void rotate(input vec3 p) {
+                p.xy *= rot2D(sin(u_time * 0.8) / 4.0);
+                p.yz *= rot2D(sin(u_time * 0.7) / 5.0);
+            }*/
+    
+            float map(vec3 p) { //sdf toroide
+                return (length(vec2(length(p.xy) - 3 / 5.0,
+                       p.z)) - 0.22) * 0.7;
             }
 
             vec3 getNormal(vec3 p) {
@@ -45,6 +59,17 @@ class App(WindowConfig):
 
                 return dist;
             }
+
+            /*vec3 triPlanar(sampler2D tex, vec3 p, vec3 normal) {
+                normal = abs(normal);
+                normal = pow(normal, vec3(15));
+                normal /= normal.x + normal.y + normal.z;
+                p = p / 2.0 + 1 / 2.0;
+
+                return (texture(tex, p.xy) * normal.z +
+                        texture(tex, p.xz) * normal.y +
+                        texture(tex, p.yz) * normal.x).rgb;
+            }*/
 
             vec3 render() { //color basado en la posicion del pixel en la pantalla
                 vec2 uv = (2 * gl_FragCoord.xy - u_resolution.xy) / u_resolution.y; //centra el origen de la pantalla
