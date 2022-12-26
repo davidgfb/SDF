@@ -24,6 +24,14 @@ class App(WindowConfig):
                 return length(p) - 3.0 / 5;
             }
 
+            vec3 getNormal(vec3 p) {
+                vec2 e = vec2(0.01, 0);
+                vec3 n = vec3(map(p)) - vec3(map(p - e.xyy),
+                     map(p - e.yxy), map(p - e.yyx));
+
+                return normalize(n);
+            }
+
             float rayMarch(vec3 ro, vec3 rd) {
                 float dist = 0;
 
@@ -45,8 +53,11 @@ class App(WindowConfig):
                 vec3 ro = vec3(0, 0, -1), rd = normalize(vec3(uv, 1)); //origen_Rayo, dir_Rayo
                 float dist = rayMarch(ro, rd); //dist al obj
 
-                if (dist < 100) col += dist; //suma la distancia al color resultante
-
+                if (dist < 100) {
+                    vec3 p = dist * rd + ro;
+                    col += getNormal(p) / 2.0 + 1 / 2.0; //dist; //suma la distancia al color resultante
+                }
+                
                 return col;
             }
 
