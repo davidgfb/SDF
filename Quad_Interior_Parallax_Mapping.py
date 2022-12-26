@@ -22,21 +22,19 @@ class App(WindowConfig):
 
             float dot2(in vec3 v) {return dot(v, v);}
 
-            float udQuad(vec3 v1, vec3 v2, vec3 v3, vec3 v4, vec3 p) {
-                #if 1
+            float udQuad(vec3 v1, vec3 v2, vec3 v3, vec3 v4, vec3 p) {       
                 // handle ill formed quads
-                if( dot( cross( v2-v1, v4-v1 ), cross( v4-v3, v2-v3 )) < 0.0 )
-                {
+                if(dot(cross(v2 - v1, v4 - v1),
+                   cross(v4 - v3, v2 - v3)) < 0) {
                     vec3 tmp = v3;
                     v3 = v4;
                     v4 = tmp;
                 }
-                #endif
-
-                
-                vec3 v21 = v2 - v1, p1 = p - v1, v32 = v3 - v2, p2 = p - v2, v43 = v4 - v3, p3 = p - v3, v14 = v1 - v4, 
-                     p4 = p - v4;
-                vec3 nor = cross( v21, v14 );
+                            
+                vec3 v21 = v2 - v1, p1 = p - v1, v32 = v3 - v2,
+                     p2 = p - v2, v43 = v4 - v3, p3 = p - v3,
+                     v14 = v1 - v4, p4 = p - v4,
+                     nor = cross(v21, v14);
 
                 return sqrt( (sign(dot(cross(v21,nor),p1)) + 
                               sign(dot(cross(v32,nor),p2)) + 
