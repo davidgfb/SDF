@@ -29,7 +29,7 @@ class App(WindowConfig):
                 vec3 n = vec3(map(p)) - vec3(map(p - e.xyy),
                      map(p - e.yxy), map(p - e.yyx));
 
-                return normalize(n);
+                return step(0.0, normalize(n)); //0.1
             }
 
             float rayMarch(vec3 ro, vec3 rd) {
