@@ -20,10 +20,6 @@ class App(WindowConfig):
         uniform vec2 u_resolution;
         uniform float h = 0;
 
-
-
-
-
         float dot2(in vec3 v) {return dot(v, v);}
 
         float udQuad(vec3 v1, vec3 v2, vec3 v3, vec3 v4, vec3 p) {
@@ -76,28 +72,6 @@ class App(WindowConfig):
 
         const vec3 lig = normalize(vec3(1.0,0.9,0.7));
 
-        
-
-
-
-
-   
-        /*float map(vec3 p, vec3 or = vec3(0),\
-                  vec3 fin = vec3(0, 4.0 / 10, 0),\
-                  float r = 3.0 / 10) {
-            vec3 pa = p - or, ba = fin - or;
-            float h = clamp(dot(pa, ba) / dot(ba, ba), 0, 1); //?
-
-            return length(-ba * h + pa) - r;
-        } //sdf capsula
-
-        vec3 getNormal(vec3 p, vec3 n = vec3(0, 1, 0)) { //sdf plano, en cualquier punto de la superficie del sdf el gradiente es el mismo que la normal del obj en ese punto 
-            float sharpness = 10; 
-            vec3 color = mix(vec3(0, 1, 0), vec3(1, 0, 0), clamp(sharpness * dot(p, n) - h, 0, 1)); //dot - h entre parentesis sino
-
-            return color;
-        }*/
-
         vec3 get_P(float dist, vec3 rd, vec3 ro) {
             return dist * rd + ro;
         }
@@ -115,8 +89,6 @@ class App(WindowConfig):
             return dist;
         }
 
-
-
         void main() { //color basado en la posicion del pixel en la pantalla 
             vec3 col = vec3(0), ro = vec3(0, 0, -1), rd = normalize(vec3((2 * gl_FragCoord.xy - u_resolution.xy) / u_resolution.y, 1)); //inicia negro, centra el origen de la pantalla, origen_Rayo, dir_Rayo
             float dist = rayMarch(ro, rd); //dist al obj
@@ -124,56 +96,13 @@ class App(WindowConfig):
             if (dist < 100) col += (map(get_P(dist, rd, ro)) + 1) / 2; //suma la distancia al color resultante
             
             fragColor = vec4(col, 1);
-        }
-
-
-        /*void main() {
-            vec2 p = (2.0*fragCoord-iResolution.xy)/iResolution.y;
-
-                vec3 ro = vec3(0.0, 0.25, 2.0), rd = normalize(vec3(p,-1.0)), col = vec3(0.0);
-
-            float t = intersect(ro,rd);
-            if( t>0.0 ) {
-                vec3 pos = ro + t*rd;
-                col += 0.03;
-                        col *= exp( -0.2*t );
-                col *= 1.0 - smoothstep( 5.0, 10.0, t );
-                }
-
-                col = pow( clamp(col,0.0,1.0), vec3(0.45) );
-                   
-            fragColor = vec4( col, 1.0 );
-        }*/
-
-
-
-        
-
-        ''') #pantalla
+        }''') #pantalla
 
         self.program['u_resolution'] = self.window_size
         
     def render(self, time, frame_time):
         self.ctx.clear()       
         self.quad.render(self.program) #uniform tiene q estar inicializado en glsl
-
-    def unicode_char_entered(self, char):
-        global h
-
-        es_Mas = char == '+'
-        
-        if es_Mas or char == '-':
-            if es_Mas:
-                h += 1
-
-            else:
-                h -= 1
-
-            self.program['h'] = h            
-
-    '''def mouse_position_event(self, x, y, dx, dy):
-        print(x, y)
-        #self.program['u_mouse'] = (x, y)'''
 
 h, es_Primera_Vez = 0, True
 run_window_config(App)
