@@ -1,4 +1,3 @@
 # SDF
 //TODO: proy ortogonal
-![Captura de pantalla (14)](https://user-images.githubusercontent.com/20667923/212160402-000b595c-a553-4c15-9ad9-a4e382a2b557.png)
-https://www.youtube.com/watch?v=WMZ_Jpz4iFI&ab_channel=MartinDonald
+![Captura de pantalla (269)](https://user-images.githubusercontent.com/20667923/215275761-27a502e8-a3b8-4eb4-bb9d-59485964ccd0.png)
