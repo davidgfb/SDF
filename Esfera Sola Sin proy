@@ -16,8 +16,8 @@ vec3 calcNormal( in vec3 pos ) {
     
 void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
      // camera movement	
-	float an = 0.0; //0.5*(iTime-10.0);
-	vec3 ro = vec3(-1, 0, 0), //vec3( 1.0*cos(an), 0.4, 1.0*sin(an) ), //pos camara
+	float an = 0.5*(iTime-10.0);
+	vec3 ro = vec3( 1.0*cos(an), 0.4, 1.0*sin(an) ), //pos camara
         ta = cero, //objetivo
     // camera matrix
         ww = normalize( ta - ro ), 
