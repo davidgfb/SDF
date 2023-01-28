@@ -1,8 +1,12 @@
 vec3 cero = vec3(0), arriba = vec3(0,1,0);
 int AA = 2;
 
-float map( in vec3 pos ) {    
+float map(in vec3 pos) { 
     return min(pos.y, length(pos - arriba / 2.0) - 0.5); 
+}
+
+float map(vec3 rd, float t, vec3 ro) { 
+    return map(rd * t + ro); 
 }
 
 float calcSoftshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax, int technique) {
@@ -10,24 +14,24 @@ float calcSoftshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax, int t
     
     for(int i=0; i<32; i++) {
 		if(res>=1e-4 && t<=tmax) {
-            float h = map(rd*t + ro);
-            res = min( res, 10.0/t*h );        
+            float h = map(rd, t, ro);
+            res = min( res, 10.0 / t * h );        
             t += h;
         }               
     }
     
     res = clamp(res, 0.0, 1.0);
     
-    return res*res*(-2.0*res + 3.0);
+    return res*res*(-2.0 * res + 3.0);
 }
 
 vec3 calcNormal(in vec3 pos) {
-    vec2 e = vec2(1.0,-1.0) * 2.8865e-4;
+    vec2 e = 2.8865e-4 * vec2(1.0,-1.0) ;
     
-    return normalize( e.xyy*map( pos + e.xyy ) + 
-					  e.yyx*map( pos + e.yyx ) + 
-					  e.yxy*map( pos + e.yxy ) + 
-					  e.xxx*map( pos + e.xxx ) );
+    return normalize( e.xyy * map( pos + e.xyy ) + 
+					  e.yyx * map( pos + e.yyx ) + 
+					  e.yxy * map( pos + e.yxy ) + 
+					  e.xxx * map( pos + e.xxx ) );
 }
 
 float castRay( in vec3 ro, in vec3 rd ) {
@@ -48,7 +52,7 @@ float castRay( in vec3 ro, in vec3 rd ) {
     float t = tmin;
     
     for( int i=0; i<64; i++ ) {
-	    float precis = 5e-4*t, res = map( rd*t + ro);
+	    float precis = 5e-4*t, res = map(rd, t, ro);
         
         if( res>=precis && t<=tmax ) {        
             t += res;
