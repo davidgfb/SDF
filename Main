@@ -9,7 +9,7 @@ float map(vec3 rd, float t, vec3 ro) {
     return map(rd * t + ro); 
 }
 
-float calcSoftshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax, int technique) {
+float calcSoftshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax) {
 	float res = 1.0, t = mint;
     
     for(int i=0; i<32; i++) {
@@ -77,7 +77,7 @@ float calcAO( in vec3 pos, in vec3 nor ) {
     return clamp( - 1.5*occ + 1.0, 0.0, 1.0 );    
 }
 
-vec3 render( in vec3 ro, in vec3 rd, in int technique) { 
+vec3 render( in vec3 ro, in vec3 rd) { 
     vec3  col = cero;
     float t = castRay(ro,rd);
 
@@ -90,7 +90,7 @@ vec3 render( in vec3 ro, in vec3 rd, in int technique) {
         // key light
             lig = normalize( vec3(-0.1, 0.3, 0.6) ), hal = normalize( lig-rd );
         float dif = clamp( dot( nor, lig ), 0.0, 1.0 ) * 
-            calcSoftshadow( pos, lig, 0.01, 3.0, technique ),
+            calcSoftshadow( pos, lig, 0.01, 3.0),
             spe = pow( clamp( dot( nor, hal ), 0.0, 1.0 ),16.0)* dif *
             (0.04 + 0.96*pow( clamp(1.0+dot(hal,rd),0.0,1.0), 5.0 ));
 		        
@@ -119,7 +119,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
         ta = -4.0 / 10.0 * arriba; 
     // camera-to-world transformation
     mat3 ca = setCamera( ro, ta, 0.0 );
-    int technique = (fract(iTime / 2.0) > 0.5) ? 1 : 0;
     vec3 tot = cero;
 
     for( int m=0; m<AA; m++ ) {
@@ -132,7 +131,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
             vec3 rd = ca * normalize( vec3(p.xy, 2.0) ),
 
             // render	
-                col = render( ro, rd, technique);
+                col = render( ro, rd);
 
             // gamma
             col = pow( col, vec3(0.4545) );
