@@ -27,8 +27,8 @@ float calcSoftshadow(in vec3 ro, in vec3 rd, in float mint, in float tmax) {
 
 vec3 calcNormal(in vec3 pos) {
     vec2 e = 2.8865e-4 * vec2(1.0,-1.0) ; //2.8865e-4 = dif h    
-    /*vec3 a = vec3(2.8865e-4), b = -a * vec3(-1,0,0), c = -a * vec3(0,-1,0), 
-        d = -a * vec3(0,0,-1);*/
+    /*vec3 a = vec3(2.8865e-4), b = -a * vec3(-1,1,1), c = -a * vec3(1,-1,1), 
+        d = -a * vec3(1,1,-1);*/
     vec3 a = e.xxx, b = e.xyy, c = e.yxy, d = e.yyx;
     
     return normalize( a * map( pos + a ) + 
